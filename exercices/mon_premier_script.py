@@ -1,22 +1,45 @@
-message = "C'est mon premier script !!!"
-print(message)
+import unittest
+from dataclasses import dataclass
+from typing import List
 
-je_change_de_type = 1
-print(type(je_change_de_type))
-je_change_de_type = "coucouc"
-print(type(je_change_de_type))
 
-prenoms = ["Guillaume", "Gilles", "Juliette", "Antoine", "François", "Cassandre"]
-more_than_seven = 0 #Initialisation de variable
-for prenom in prenoms: #Pour chaque éléments de la liste prenoms
-    if len(prenom) > 7: #Si longueur de prenom strictement supérieur à 7
-        more_than_seven += 1 #Alors on incrémente 1 à more_thant_seven
-        print(prenom + " est un prénom avec un nombre de lettres supérieur à 7")
-    else:
-        print(prenom + " est un prénom avec un nombre de lettres inférieur ou égal à 7")
-print("Nombre de prénoms dont le nombre de lettres est supérieur à 7 : " + str(more_than_seven))
+MINIMUM_LENGTH_EXCLUSIVE: int = 7 #Suppression du nombre magique
 
-def saluer(nom: str) -> str:
-    return "Bonjour " + nom
 
-print(saluer("Alice"))  # Affiche : Bonjour Alice
+@dataclass
+class FirstName:
+    value: str
+
+    def has_more_than_seven_letters(self) -> bool: #Encapsulation métier
+        return len(self.value) > MINIMUM_LENGTH_EXCLUSIVE
+
+
+def count_first_names_longer_than_seven_letters(first_names: List[FirstName]) -> int: #Typage complet
+    long_first_names_count: int = 0
+
+    for first_name in first_names:
+        if first_name.has_more_than_seven_letters():
+            long_first_names_count += 1
+
+    return long_first_names_count
+
+
+class TestCountFirstNames(unittest.TestCase): #Test lisible
+
+    def test_should_count_first_names_longer_than_seven_letters(self) -> None:
+        first_names: List[FirstName] = [
+            FirstName("Guillaume"),
+            FirstName("Gilles"),
+            FirstName("Juliette"),
+            FirstName("Antoine"),
+            FirstName("François"),
+            FirstName("Cassandre"),
+        ]
+
+        result: int = count_first_names_longer_than_seven_letters(first_names)
+
+        self.assertEqual(result, 4)
+
+
+if __name__ == "__main__":
+    unittest.main()

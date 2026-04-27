@@ -5,7 +5,7 @@ metadata:
   namespace: quentin-gense-dev
 spec:
   ttlSecondsAfterFinished: 100
-  backoffLimit: 0
+  backoffLimit: 5
   template:
     spec:
       containers:

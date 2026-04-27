@@ -54,10 +54,6 @@ jobs:
           kubectl config set-credentials openshift-credentials --token=${{secrets.OPENSHIFT_TOKEN}}
           kubectl config set-context openshift-context --cluster=openshift-cluster --user=openshift-credentials --namespace=${{vars.OPENSHIFT_USERNAME}}-dev
           kubectl config use openshift-context
-      - name: Debug kubeconfig
-        run: |
-          kubectl config view --raw
-          kubectl config view --raw -o jsonpath='{.clusters[0].cluster.server}' | cat -A
       - name: Get Routes from Kubernetes and add them to env
         run: |
           DAILYCLEAN_ROUTE_URL=$(kubectl get route ${{env.DAILYCLEAN_ROUTE_NAME}} -o jsonpath='{.spec.host}')
